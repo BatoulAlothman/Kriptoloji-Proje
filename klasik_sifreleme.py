@@ -1,11 +1,23 @@
+def turkce_karakter_temizle(metin):
+    """
+    Şifreleme sırasında modüler aritmetiğin çökmemesi için
+    Türkçe karakterleri İngilizce karşılıklarına çevirir.
+    """
+    degisimler = str.maketrans("çğıöşüÇĞİÖŞÜ", "cgiosuCGIOSU")
+    return metin.translate(degisimler)
+
+
 def caesar_cipher(text, shift, mode='encrypt'):
     result = ""
+    # Türkçe karakter riskini ortadan kaldırıyoruz
+    text = turkce_karakter_temizle(text)
+
     # Şifre çözme modundaysak kaydırma işlemini tersine çeviriyoruz
     if mode == 'decrypt':
         shift = -shift
 
     for char in text:
-        if char.isalpha():  # Sadece harfleri işleme al (boşluk ve noktalama işaretlerini atla)
+        if char.isalpha():  # Sadece harfleri işleme al
             ascii_offset = 65 if char.isupper() else 97
             # Modüler aritmetik ile alfabede kaydırma işlemi
             shifted_char = chr((ord(char) - ascii_offset + shift) % 26 + ascii_offset)
@@ -17,7 +29,16 @@ def caesar_cipher(text, shift, mode='encrypt'):
 
 def vigenere_cipher(text, key, mode='encrypt'):
     result = ""
-    key = key.upper()
+    text = turkce_karakter_temizle(text)
+
+    # Anahtar kelimedeki Türkçe karakterleri temizle ve boşluk/rakam varsa atla
+    key = turkce_karakter_temizle(key).upper()
+    key = "".join([c for c in key if c.isalpha()])
+
+    # Eğer anahtar sadece rakamlardan oluşuyorsa çökmemesi için güvenlik önlemi
+    if not key:
+        return text
+
     key_index = 0
 
     for char in text:
@@ -39,16 +60,20 @@ def vigenere_cipher(text, key, mode='encrypt'):
     return result
 
 
-# evet test kodları
+# --- TEST KODLARI ---
 if __name__ == "__main__":
-    orijinal_metin = "ANKARA"
+    # Türkçe karakterler içeren test metni
+    orijinal_metin = "ŞİFRELEME ÖDEVİ"
 
     print("--- CAESAR TEST ---")
     caesar_sifreli = caesar_cipher(orijinal_metin, shift=3, mode='encrypt')
+    print(f"Orijinal: {orijinal_metin}")
     print(f"Şifreli: {caesar_sifreli}")
     print(f"Çözülmüş: {caesar_cipher(caesar_sifreli, shift=3, mode='decrypt')}\n")
 
     print("--- VIGENERE TEST ---")
-    vigenere_sifreli = vigenere_cipher(orijinal_metin, key="BMB", mode='encrypt')
+    # Boşluk ve rakam içeren hatalı bir anahtar veriyoruz, sistem bunu sadece "BMB" olarak algılayacak
+    vigenere_sifreli = vigenere_cipher(orijinal_metin, key="BMB 123", mode='encrypt')
+    print(f"Orijinal: {orijinal_metin}")
     print(f"Şifreli: {vigenere_sifreli}")
-    print(f"Çözülmüş: {vigenere_cipher(vigenere_sifreli, key='BMB', mode='decrypt')}")
+    print(f"Çözülmüş: {vigenere_cipher(vigenere_sifreli, key='BMB 123', mode='decrypt')}")
