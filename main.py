@@ -11,7 +11,7 @@ from kriptanaliz import frekans_analizi
 class KriptosistemGUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("Gelişmiş Kriptosistem Paneli - Müh. Batool Al-Othman")
+        self.root.title("Gelişmiş Kriptosistem Paneli ")
         self.root.geometry("750x600")
 
         # Sekme (Tab) yöneticisini oluştur
