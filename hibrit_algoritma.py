@@ -1,9 +1,18 @@
 import string
 import random
 
+def turkce_karakter_temizle(metin):
+    """
+    Şifreleme sırasında alfabede bulunmayan karakterler yüzünden
+    programın çökmemesi için Türkçe harfleri dönüştürür.
+    """
+    degisimler = str.maketrans("çğıöşüÇĞİÖŞÜ", "cgiosuCGIOSU")
+    return metin.translate(degisimler)
+
 def ozel_alfabe_olustur(anahtar_kelime):
     standart_alfabe = string.ascii_uppercase
-    anahtar_kelime = anahtar_kelime.upper()
+    # Anahtar kelimedeki Türkçe karakterleri temizle
+    anahtar_kelime = turkce_karakter_temizle(anahtar_kelime).upper()
 
     ozel_alfabe = ""
 
@@ -25,7 +34,8 @@ def asama1_yerine_koyma(metin, anahtar_kelime, mode='encrypt'):
     ozel_alfabe = ozel_alfabe_olustur(anahtar_kelime)
 
     sonuc = ""
-    metin = metin.upper()
+    # Metindeki Türkçe karakterleri temizle
+    metin = turkce_karakter_temizle(metin).upper()
 
     for harf in metin:
         if harf.isalpha():
@@ -77,11 +87,11 @@ def asama3_padding_kaldir(metin):
 
     return sonuc
 
-
 # --- TEST BLOĞU ---
 if __name__ == "__main__":
-    test_metni = "merhaba"
-    anahtar = "betul"  # Hata almamak için İngilizce karakterle güncelledik
+    # Türkçe karakterlerle test ediyoruz
+    test_metni = "MÜHENDİS BETÜL"
+    anahtar = "ÇAĞDAŞ"
 
     print(f"Orijinal Metin: {test_metni}\n")
 
@@ -96,7 +106,7 @@ if __name__ == "__main__":
     print(f"Aşama 2 (Blok Ters Çevirme) Sonucu: {adim2_sifreli}")
 
     adim3_sifreli = asama3_padding_ekle(adim2_sifreli)
-    print(f"Aşama 3 (Dinamik Padding) Sonucu : {adim3_sifreli} (Araya girenler rastgele!)\n")
+    print(f"Aşama 3 (Dinamik Padding) Sonucu : {adim3_sifreli} \n")
 
     # --- ŞİFRE ÇÖZME (DECRYPTION) SÜRECİ ---
     print("--- ŞİFRE ÇÖZÜLÜYOR ---")
