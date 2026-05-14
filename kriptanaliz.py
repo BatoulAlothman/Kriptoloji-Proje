@@ -34,8 +34,8 @@ if __name__ == "__main__":
     # Test için diğer dosyamızdan fonksiyonları içe aktarıyoruz
     from hibrit_algoritma import asama1_yerine_koyma, asama2_blok_yer_degistirme, asama3_padding_ekle
 
-    orijinal_metin = "KRIPTOLOJI PROJESI COK ZEVKLI"
-    gercek_anahtar = "MUDENDIS"
+    orijinal_metin = "KRIPTOLOJI PROJESI "
+    gercek_anahtar = "MÜDENDIS"
 
     print(f"Orijinal Metin: {orijinal_metin}")
 
